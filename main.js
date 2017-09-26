@@ -2,13 +2,12 @@ const {app, BrowserWindow, Tray} = require('electron')
 const path = require('path')
 const url = require('url')
 const fs = require('fs')
-
+const os = require('os')
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win
 let tray
-
-
+var platform = os.platform()
 
 function createWindow () {
   // Create the browser window.
@@ -23,23 +22,26 @@ function createWindow () {
 
   // Open the DevTools.
   win.webContents.openDevTools()
-  app.dock.hide()
+  if (platform == 'darwin') {
+    app.dock.hide()
+  }
+
   // Emitted when the window is closed.
   win.on('close', (event) => {
     // Dereference the window object, usually you would store windows
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
-    event.preventDefault(); //this prevents it from closing. The `closed` event will not fire now
-    win.hide();
+    event.preventDefault()//this prevents it from closing. The `closed` event will not fire now
+    win.hide()
   })
-  
+
   tray.on('click', () => {
     if (win.isVisible()){
-      win.hide() 
-      
+      win.hide()
+
     }else {
       win.show()
-    } 
+    }
   })
 }
 

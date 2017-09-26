@@ -2,8 +2,8 @@ const {dialog} = require('electron').remote
 const fs = require('electron').remote.require('fs')
 const https = require('electron').remote.require('https')
 const http = require('electron').remote.require('http')
-const os = require('os');
 const process = require('electron').remote.process
+const platform = require('electron').remote.platform
 
 const LOCK_FILE_RATE = 2000
 const MM_RATE = 500
@@ -15,8 +15,6 @@ var client = {
     isRunning : false,
     lci : {}
 }
-
-var platform = os.platform()
 
 function logError(error) {
     console.log("ERROR: ", error)
@@ -152,7 +150,7 @@ function startQueue(queueId) {
 
 process.on('uncaughtException', function (err) {
     console.log(err)
-        
+
     switch (err.errno) {
         case "ECONNREFUSED":
             clearInterval(client.matchMakingInterval)
