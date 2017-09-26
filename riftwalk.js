@@ -2,6 +2,8 @@ const {dialog} = require('electron').remote
 const fs = require('electron').remote.require('fs')
 const https = require('electron').remote.require('https')
 const http = require('electron').remote.require('http')
+const os = require('os');
+
 
 const LOCK_FILE_RATE = 2000
 const MM_RATE = 500
@@ -14,13 +16,16 @@ var client = {
     lci : {}
 }
 
+var platform = os.platform()
+
 function logError(error) {
     console.log("ERROR: ", error)
 }
 
 function validateDirectory(cb) {
+    var dir = (platform == 'win32' ? client.gameDirectory+"/LeagueClient.exe" : client.gameDirectory+"/LeagueClient.app")
     if (client.gameDirectory) {
-        fs.access(client.gameDirectory+"/LeagueClient.exe", fs.constants.R_OK, (err) => {
+        fs.access(dir, fs.constants.R_OK, (err) => {
             if (!err) {
                 client.lockFileInterval = setInterval(checkLeagueClientOpen, LOCK_FILE_RATE)
             }
@@ -31,8 +36,11 @@ function validateDirectory(cb) {
 }
 
 function selectDirectory() {
-    dialog.showOpenDialog({properties: ['openDirectory']}, (paths) => {
+    dialog.showOpenDialog({properties: (platform == 'win32' ? ['openDirectory'] : ['openFile'])}, (paths) => {
         if (paths.length > 0) {
+            if (platform == "darwin"){
+              paths[0] += "/Contents/LoL"
+            }
             console.log(paths[0])
             localStorage.setItem("gameDirectory", paths[0])
             client.gameDirectory = paths[0]
