@@ -1,12 +1,30 @@
 body {
-    background-color: #021823;
+    background-color: #010A14;
     color: #E3D8B5 !important;
 }
 
 html {
     background-color: inherit !important;
+    -webkit-app-region: drag;
+    -webkit-user-select: none; 
+    cursor: default;
 }
 
 input {
     background: #1E2327;
+}
+
+.close-icon{
+  position: absolute; 
+  right: 10px; 
+  top: 5px;
+  width: 30px;
+  height: 19px;
+  cursor: pointer;
+  background-image: url('../img/close.png');
+}
+
+.close-icon:hover{
+  
+  background-image: url('../img/close-active.png');
 }

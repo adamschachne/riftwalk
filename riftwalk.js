@@ -3,7 +3,7 @@ const fs = require('electron').remote.require('fs')
 const https = require('electron').remote.require('https')
 const http = require('electron').remote.require('http')
 const os = require('os');
-
+const process = require('electron').remote.process
 
 const LOCK_FILE_RATE = 2000
 const MM_RATE = 500
@@ -148,3 +148,14 @@ function startQueue(queueId) {
         }
     }, (obj) => {console.log(obj)})
 }
+
+
+process.on('uncaughtException', function (err) {
+    console.log(err)
+        
+    switch (err.errno) {
+        case "ECONNREFUSED":
+            clearInterval(client.matchMakingInterval)
+        break;
+    }
+})

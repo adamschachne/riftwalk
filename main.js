@@ -1,4 +1,4 @@
-const {app, BrowserWindow} = require('electron')
+const {app, BrowserWindow, Tray} = require('electron')
 const path = require('path')
 const url = require('url')
 const fs = require('fs')
@@ -6,11 +6,14 @@ const fs = require('fs')
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win
+let tray
+
+
 
 function createWindow () {
   // Create the browser window.
-  win = new BrowserWindow({width: 800, height: 600/*transparent: true, frame: false*/})
-
+  win = new BrowserWindow({width: 500, height: 300, resizable: false, frame: false/*transparent: true, frame: false*/})
+  tray = new Tray('img/trayicon.png')
   // and load the index.html of the app.
   win.loadURL(url.format({
     pathname: path.join(__dirname, 'index.html'),
@@ -20,15 +23,27 @@ function createWindow () {
 
   // Open the DevTools.
   win.webContents.openDevTools()
-
+  app.dock.hide()
   // Emitted when the window is closed.
-  win.on('closed', () => {
+  win.on('close', (event) => {
     // Dereference the window object, usually you would store windows
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
-    win = null
+    event.preventDefault(); //this prevents it from closing. The `closed` event will not fire now
+    win.hide();
+  })
+  
+  tray.on('click', () => {
+    if (win.isVisible()){
+      win.hide() 
+      
+    }else {
+      win.show()
+    } 
   })
 }
+
+
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -44,13 +59,23 @@ app.on('window-all-closed', () => {
   }
 })
 
+app.on('before-quit', () => {
+    win.removeAllListeners('close');
+    win.close();
+});
+
 app.on('activate', () => {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (win === null) {
     createWindow()
   }
+  else {
+    win.show()
+  }
 })
+
+
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
