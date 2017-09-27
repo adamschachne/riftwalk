@@ -28,3 +28,7 @@ input {
   
   background-image: url('../img/close-active.png');
 }
+
+.league-text{
+  color: #E3D8B5 !important;
+}

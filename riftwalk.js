@@ -3,10 +3,12 @@ const fs = require('electron').remote.require('fs')
 const https = require('electron').remote.require('https')
 const http = require('electron').remote.require('http')
 const process = require('electron').remote.process
-const platform = require('electron').remote.platform
+const platform = require('electron').remote.require('os').platform()
 
 const LOCK_FILE_RATE = 2000
 const MM_RATE = 500
+
+
 
 var client = {
     gameDirectory : localStorage.getItem("gameDirectory"),
@@ -15,6 +17,8 @@ var client = {
     isRunning : false,
     lci : {}
 }
+
+
 
 function logError(error) {
     console.log("ERROR: ", error)
@@ -27,13 +31,19 @@ function validateDirectory(cb) {
             if (!err) {
                 client.lockFileInterval = setInterval(checkLeagueClientOpen, LOCK_FILE_RATE)
             }
+            else {
+              client.gameDirectory = null
+            }
             cb(!err)
         })
         // fs.readFile(client.gameDirectory+"", callback)
     }
+    else {
+      cb(false)
+    }
 }
 
-function selectDirectory() {
+function selectDirectory(cb) {
     dialog.showOpenDialog({properties: (platform == 'win32' ? ['openDirectory'] : ['openFile'])}, (paths) => {
         if (paths.length > 0) {
             if (platform == "darwin"){
@@ -43,11 +53,7 @@ function selectDirectory() {
             localStorage.setItem("gameDirectory", paths[0])
             client.gameDirectory = paths[0]
             validateDirectory((isValid) => {
-                if (isValid) {
-                    // selected an OK directory :) TODO
-                } else {
-                    logError("Invalid client directory")
-                }
+              cb(isValid)
             })
         }
         return null
