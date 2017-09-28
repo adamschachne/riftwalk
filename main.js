@@ -22,9 +22,7 @@ function createWindow () {
 
   // Open the DevTools.
   win.webContents.openDevTools()
-  if (platform == 'darwin') {
-    app.dock.hide()
-  }
+
 
   // Emitted when the window is closed.
   win.on('close', (event) => {
@@ -33,14 +31,23 @@ function createWindow () {
     // when you should delete the corresponding element.
     event.preventDefault()//this prevents it from closing. The `closed` event will not fire now
     win.hide()
+    if (platform == 'darwin') {
+      app.dock.hide()
+    }
   })
 
   tray.on('click', () => {
     if (win.isVisible()){
       win.hide()
+      if (platform == 'darwin') {
+        app.dock.hide()
+      }
 
     }else {
       win.show()
+      if (platform == 'darwin') {
+        app.dock.show()
+      }
     }
   })
 }

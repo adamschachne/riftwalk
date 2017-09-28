@@ -13,16 +13,16 @@
     <!-- <img src="img/close.png" class="close-icon" style=""> -->
     <div id="app">
         <div class="close-icon" @click="close"></div>
-        <section class="section" id="firstTimeSetup" v-if="firstTime" style="padding-top: 40px;">
-            <div class="container">
-                <h1 class="title league-text" v-bind:style="{opacity: titleOpacity, transition: 'opacity 0.5s'}">
+        <section class="section" id="firstTimeSetup" v-if="firstTime" style="padding-top: 30px;">
+            <div class="container" :style="{left: (step == 1) ? '0px' : '-500px', transition: 'left 0.3s'}">
+                <h1 class="title league-text" v-bind:style="{opacity: titleOpacity, transition: 'opacity 0.2s'}">
                     Welcome to Riftwalk!
                 </h1>
                 <p class="subtitle league-text" v-bind:style="{opacity: subtitleOpacity, transition: 'opacity 0.5s'}">
                     We'll help you get started with this companion app.
                 </p>
                 <div v-bind:style="{opacity: actionOpacity, transition: 'opacity 0.5s'}">
-                  <p class="league-text">Select your League of Legends {{platform == "darwin" ? "app" : "directory"}}</p>
+                  <p class="league-text">Select your League of Legends {{platform == "darwin" ? ".app file" : "directory"}}</p>
                   <section class="section" style="background-color: #1E2327; padding: 1em;">
                     <div class="container">
                       
@@ -43,10 +43,17 @@
                       </nav>
                     </div>
                   </section>
-                  <a class="button is-info" style="margin-left: auto;margin-right: auto;position: relative;display: inherit;top: 15px;width: 220px;" :disabled="!client.gameDirectory">Next</a>
+                  <a class="button is-info" style="margin-left: auto;margin-right: auto;position: relative;display: inherit;top: 15px;width: 220px;" :disabled="!client.gameDirectory" @click="next()">Next</a>
                 </div>
             </div>
-            
+            <div class="container" :style="{left: (step == 2) ? '0px' : '500px', transition: 'left 0.3s', top: '-213px'}">
+                <h1 class="title league-text" v-bind:style="{opacity: titleOpacity, transition: 'opacity 0.2s'}">
+                    Step 2
+                </h1>
+                <p class="subtitle league-text" v-bind:style="{opacity: subtitleOpacity, transition: 'opacity 0.5s'}">
+                    Connect your smartphone
+                </p>
+            </div>
         </section>
     </div>
 </body>

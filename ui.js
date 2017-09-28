@@ -7,7 +7,8 @@ var ui = new Vue({
     },
     startSetup() {
       if (!client.gameDirectory){
-        client.gameDirectory = (platform == 'win32' ? "C:\\Riot Games\\League of Legends" : "/Applications/Leagueof Legends.app")
+        client.gameDirectory = (platform == 'win32' ? "C:\\Riot Games\\League of Legends" : "/Applications/League of Legends.app/Contents/LoL")
+        console.log(client.gameDirectory)
       }
       validateDirectory((success) => {
         if (success){
@@ -26,12 +27,15 @@ var ui = new Vue({
       selectDirectory((success) => {
         if (success){
           //valid directory
-          step = 2
+          ui.step = 2
         }
         else {
           ui.invalidDirectory()
         }
       })
+    },
+    next(){
+      this.step = 2
     },
     invalidDirectory(){
       console.log('invalid directory')
