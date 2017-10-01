@@ -6,17 +6,22 @@ body {
 html {
     background-color: inherit !important;
     -webkit-app-region: drag;
-    -webkit-user-select: none; 
+    -webkit-user-select: none;
     cursor: default;
+    overflow: hidden !important;
 }
 
 input {
     background: #1E2327;
 }
 
+.no-drag {
+    -webkit-app-region: no-drag;
+}
+
 .close-icon{
-  position: absolute; 
-  right: 10px; 
+  position: absolute;
+  right: 10px;
   top: 5px;
   width: 30px;
   height: 19px;
@@ -25,7 +30,6 @@ input {
 }
 
 .close-icon:hover{
-  
   background-image: url('../img/close-active.png');
 }
 

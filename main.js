@@ -1,8 +1,10 @@
-const {app, BrowserWindow, Tray} = require('electron')
+const {app, BrowserWindow, Tray, Menu} = require('electron')
 const path = require('path')
 const url = require('url')
 const fs = require('fs')
 const os = require('os')
+const notifier = require('node-notifier')
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win
@@ -13,6 +15,14 @@ function createWindow () {
   // Create the browser window.
   win = new BrowserWindow({width: 500, height: 300, resizable: false, frame: false/*transparent: true, frame: false*/})
   tray = new Tray('img/trayicon.png')
+  const contextMenu = Menu.buildFromTemplate([
+    {label: 'Item1', type: 'radio'},
+    {label: 'Item2', type: 'radio'},
+    {label: 'Item3', type: 'radio', checked: true},
+    {label: 'Item4', type: 'radio'}
+    ])
+    tray.setToolTip('This is my application.')
+    tray.setContextMenu(contextMenu)
   // and load the index.html of the app.
   win.loadURL(url.format({
     pathname: path.join(__dirname, 'index.html'),
@@ -34,7 +44,12 @@ function createWindow () {
     if (platform == 'darwin') {
       app.dock.hide()
     }
-  })
+        // Object
+        notifier.notify({
+          'title': 'Riftwalk',
+          'message': 'We\'ll keep running in the background to make sure you don\'t miss a queue!'
+        })
+    })
 
   tray.on('click', () => {
     if (win.isVisible()){
@@ -83,8 +98,6 @@ app.on('activate', () => {
     win.show()
   }
 })
-
-
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.

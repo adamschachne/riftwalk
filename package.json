@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/adamschachne/riftwalk/issues"
   },
-  "homepage": "https://github.com/adamschachne/riftwalk#readme"
+  "homepage": "https://github.com/adamschachne/riftwalk#readme",
+  "dependencies": {
+    "node-notifier": "^5.1.2"
+  }
 }

@@ -12,7 +12,7 @@ var ui = new Vue({
       }
       validateDirectory((success) => {
         if (success){
-          
+
         }
       })
       this.titleOpacity = 1
@@ -27,7 +27,7 @@ var ui = new Vue({
       selectDirectory((success) => {
         if (success){
           //valid directory
-          ui.step = 2
+          //ui.step = 2
         }
         else {
           ui.invalidDirectory()
@@ -35,7 +35,11 @@ var ui = new Vue({
       })
     },
     next(){
-      this.step = 2
+      if (client.gameDirectory) {
+          localStorage.setItem("gameDirectory", client.gameDirectory)
+          this.step = 2
+          connectToAPI()
+      }
     },
     invalidDirectory(){
       console.log('invalid directory')

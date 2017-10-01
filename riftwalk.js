@@ -7,8 +7,7 @@ const platform = require('electron').remote.require('os').platform()
 
 const LOCK_FILE_RATE = 2000
 const MM_RATE = 500
-
-
+const API_URL = 'http://104.236.184.38:3000'
 
 var client = {
     gameDirectory : localStorage.getItem("gameDirectory"),
@@ -17,8 +16,7 @@ var client = {
     isRunning : false,
     lci : {}
 }
-
-
+var socket = null
 
 function logError(error) {
     console.log("ERROR: ", error)
@@ -29,7 +27,7 @@ function validateDirectory(cb) {
     if (client.gameDirectory) {
         fs.access(dir, fs.constants.R_OK, (err) => {
             if (!err) {
-                client.lockFileInterval = setInterval(checkLeagueClientOpen, LOCK_FILE_RATE)
+                //client.lockFileInterval = setInterval(checkLeagueClientOpen, LOCK_FILE_RATE)
             }
             else {
               client.gameDirectory = null
@@ -50,7 +48,7 @@ function selectDirectory(cb) {
               paths[0] += "/Contents/LoL"
             }
             console.log(paths[0])
-            localStorage.setItem("gameDirectory", paths[0])
+            // localStorage.setItem("gameDirectory", paths[0])
             client.gameDirectory = paths[0]
             validateDirectory((isValid) => {
               cb(isValid)
@@ -153,6 +151,10 @@ function startQueue(queueId) {
     }, (obj) => {console.log(obj)})
 }
 
+function connectToAPI() {
+    socket = io.connect(API_URL,{'forceNew':true});
+    initEvents()
+}
 
 process.on('uncaughtException', function (err) {
     console.log(err)
