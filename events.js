@@ -9,6 +9,13 @@ function initEvents() {
         console.log('good')
     })
 
+    socket.on('connection failure', function(data) {
+        console.log('bad token')
+        localStorage.removeItem('gameDirectory')
+        localStorage.removeItem('token')
+        location.reload()
+    })
+
     socket.on('timeout', function() {
         setTimeout(function() {
             connectToAPI()
@@ -16,7 +23,16 @@ function initEvents() {
     })
 
     socket.on('created client', function(data) {
-        //localStorage.setItem('token', data.token)
+        localStorage.setItem('token', data.token)
         socket.emit('request code', {token : data.token})
+    })
+
+    socket.on('code generated', function(data) {
+        console.log(data.code)
+        ui.code = data.code
+    })
+
+    socket.on('mobile added', function(data){
+        localStorage.setItem('completedSetup', true)
     })
 }

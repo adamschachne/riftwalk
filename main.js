@@ -13,13 +13,13 @@ var platform = os.platform()
 
 function createWindow () {
   // Create the browser window.
-  win = new BrowserWindow({width: 500, height: 300, resizable: false, frame: false/*transparent: true, frame: false*/})
+  win = new BrowserWindow({width: 500, height: 300, resizable: false, frame: false, backgroundColor: '#010A14'/*transparent: true, frame: false*/})
   tray = new Tray('img/trayicon.png')
   const contextMenu = Menu.buildFromTemplate([
-    {label: 'Item1', type: 'radio'},
-    {label: 'Item2', type: 'radio'},
-    {label: 'Item3', type: 'radio', checked: true},
-    {label: 'Item4', type: 'radio'}
+        {label: 'Item1', type: 'radio'},
+        {label: 'Item2', type: 'radio'},
+        {label: 'Item3', type: 'radio', checked: true},
+        {label: 'Item4', type: 'radio'}
     ])
     tray.setToolTip('This is my application.')
     tray.setContextMenu(contextMenu)

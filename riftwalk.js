@@ -30,6 +30,7 @@ function validateDirectory(cb) {
                 //client.lockFileInterval = setInterval(checkLeagueClientOpen, LOCK_FILE_RATE)
             }
             else {
+                console.log('aoiwujfbalwiudbawlidujb ')
               client.gameDirectory = null
             }
             cb(!err)

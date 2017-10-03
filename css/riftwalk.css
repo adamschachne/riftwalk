@@ -19,6 +19,10 @@ input {
     -webkit-app-region: no-drag;
 }
 
+.subtitle {
+    font-size: 1.20rem !important;
+}
+
 .close-icon{
   position: absolute;
   right: 10px;
