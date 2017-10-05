@@ -20,10 +20,16 @@ function createWindow () {
 
 
   const contextMenu = Menu.buildFromTemplate([
-        {label: 'Item1', type: 'radio'},
-        {label: 'Item2', type: 'radio'},
-        {label: 'Item3', type: 'radio', checked: true},
-        {label: 'Item4', type: 'radio'}
+        {label: 'Show', type: 'normal', click: function(){
+          win.show()
+          if (platform == 'darwin') {
+            app.dock.show()
+          }
+        }},
+        {label: '', type: 'separator'},
+        {label: 'Quit', type: 'normal', click: function(){
+          app.quit()
+        }}
     ])
     tray.setToolTip('This is my application.')
     tray.setContextMenu(contextMenu)
