@@ -34,5 +34,7 @@ function initEvents() {
 
     socket.on('mobile added', function(data){
         localStorage.setItem('completedSetup', true)
+        ui.firstTime = false
+        socket.emit('request device list')
     })
 }
