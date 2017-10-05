@@ -14,7 +14,11 @@ var platform = os.platform()
 function createWindow () {
   // Create the browser window.
   win = new BrowserWindow({width: 500, height: 300, resizable: false, frame: false, backgroundColor: '#010A14'/*transparent: true, frame: false*/})
-  tray = new Tray('img/trayicon.png')
+  // tray = new Tray('img/trayicon.png')
+  var iconPath = path.join(__dirname, '/img/trayicon.png')
+  tray = new Tray(iconPath);
+
+
   const contextMenu = Menu.buildFromTemplate([
         {label: 'Item1', type: 'radio'},
         {label: 'Item2', type: 'radio'},
