@@ -6,6 +6,9 @@ function initEvents() {
     })
 
     socket.on('connection success', function(data) {
+        if (ui.firstTime) {
+            socket.emit('request code', {token : localStorage.getItem('token')})
+        }
         console.log('good')
     })
 
@@ -21,6 +24,12 @@ function initEvents() {
             connectToAPI()
         }, 60000)
     })
+
+    socket.on('disconnect', () => {
+        if (ui.firstTime) {
+            ui.code = null
+        }
+    });
 
     socket.on('created client', function(data) {
         localStorage.setItem('token', data.token)
