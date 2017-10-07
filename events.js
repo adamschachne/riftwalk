@@ -37,4 +37,12 @@ function initEvents() {
         ui.firstTime = false
         socket.emit('request device list')
     })
+    
+    socket.on('device list', function(data){
+      
+    })
+    
+    socket.on('start queue', function(data){
+      startQueue(data.queueId)
+    })
 }

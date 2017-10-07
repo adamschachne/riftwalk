@@ -38,6 +38,7 @@ var ui = new Vue({
       if (client.gameDirectory) {
           localStorage.setItem("gameDirectory", client.gameDirectory)
           this.step = 2
+          client.lockFileInterval = setInterval(checkLeagueClientOpen, LOCK_FILE_RATE)
           connectToAPI()
       }
     },
