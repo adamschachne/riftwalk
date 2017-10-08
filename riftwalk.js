@@ -27,7 +27,7 @@ function validateDirectory(cb) {
     if (client.gameDirectory) {
         fs.access(dir, fs.constants.R_OK, (err) => {
             if (!err) {
-                //client.lockFileInterval = setInterval(checkLeagueClientOpen, LOCK_FILE_RATE)
+                // client.lockFileInterval = setInterval(checkLeagueClientOpen, LOCK_FILE_RATE)
             }
             else {
                 console.log('aoiwujfbalwiudbawlidujb ')
@@ -93,40 +93,54 @@ function parseLockfile(data) {
 }
 
 function sendRequest(endpoint, method, payload, callbackStatus, callbackBody) {
-    var options = {
-        host: 'localhost',
-        port: client.lci.port,
-        path: endpoint,
-        method: method,
-        rejectUnauthorized: false,
-
-        headers: {
-            'Content-Type' : "application/json",
-            'Authorization' : client.lci.header
-        }
-    }
-
-    var protocol = client.lci.protocol == 'https' ? https : http
-    var req = protocol.request(options, function(res) {
-        callbackStatus(res.statusCode);
-        res.setEncoding('utf8')
-        //console.log(options.host + ':' + res.statusCode);
-        res.on('data', function (data) {
-            callbackBody(JSON.parse(data));
-        })
+    // var options = {
+    //     host: 'localhost',
+    //     port: client.lci.port,
+    //     path: endpoint,
+    //     method: method,
+    //     rejectUnauthorized: false,
+    // 
+    //     headers: {
+    //         'Content-Type' : "application/json",
+    //         'Authorization' : client.lci.header
+    //     }
+    // }
+    // 
+    // var protocol = client.lci.protocol == 'https' ? https : http
+    // var req = https.request(options, function(res) {
+    //     callbackStatus(res.statusCode);
+    //     res.setEncoding('utf8')
+    //     //console.log(options.host + ':' + res.statusCode);
+    //     res.on('data', function (data) {
+    //         console.log(data)
+    //         // callbackBody(JSON.parse(data));
+    //     });
+    //     res.on('end', function(){
+    //       console.log("ENDEDEEDEDEDEDED")
+    //     })
+    // })
+    // 
+    // req.on('error', function(err) {
+    //     console.log(err)
+    // })
+    // 
+    // req.write(JSON.stringify(payload));
+    // req.end()
+    $.ajax({
+      url: client.lci.protocol+"://localhost:"+client.lci.port+endpoint,
+      headers: {'Content-Type' : "application/json", 'Authorization' : client.lci.header},
+      method: method,
+      data: payload
     })
-
-    req.on('error', function(err) {
-        console.log(err)
+    .always(function(data, textStatus){
+      callbackStatus(data.status)
+      callbackBody(data)      
     })
-
-    req.write(JSON.stringify(payload));
-    req.end()
 }
 
 function queueHandler() {
     sendRequest("/lol-matchmaking/v1/ready-check", "GET", {}, (code) => {
-        console.log(code)
+        //console.log(code)
     }, (obj) => {
         if (obj.httpStatus == 404) {
             //console.log(obj.message)
@@ -136,20 +150,64 @@ function queueHandler() {
     })
 }
 
-function startQueue(queueId) {
-    sendRequest("/lol-lobby/v1/lobby", "POST", {"queueId": queueId}, (code) => {
-        if (code == 200) {
-            sendRequest("/lol-matchmaking/v1/search", "POST", {}, (code) => {
-                if (code == 200) {
-                    console.log("in queue")
-                } else {
-                    console.log(code)
-                }
-            }, (obj) => {console.log(obj)})
-        } else {
-            console.log(code)
-        }
-    }, (obj) => {console.log(obj)})
+// function startQueue(queueId, retries) {
+//   console.log('retries', retries)
+//   if (retries > 0){
+//     deleteQueue(function(){
+//       createLobby(queueId, function(success){
+//         if (success){
+//           matchMakingSearch(function(success){
+//             if (!success){
+//               setTimeout(function(){
+//                 startQueue(queueId, --retries)
+//               }, 50)
+//             }
+//           })
+//         }
+//         else {
+//           setTimeout(function(){
+//             startQueue(queueId, --retries)
+//           }, 50)
+//         }
+//       })
+//     })
+//   }
+// 
+// }
+
+function matchMakingSearch(cb){
+  sendRequest("/lol-matchmaking/v1/search", "POST", {}, (code) => {
+      if (Math.floor(code/100) == 2) {
+          console.log("in queue")
+          cb(true)
+      } else {
+          console.log(code)
+          cb(false)
+      }
+  }, (obj) => {console.log(obj)})
+}
+
+function createLobby(queueId, cb){
+  sendRequest("/lol-lobby/v1/lobby", "POST", {"queueId": queueId}, (code) => {
+      if (Math.floor(code/100) == 2) {
+        cb(true)
+      } else {
+          console.log(code)
+          cb(false)
+      }
+  }, (obj) => {console.log(obj)})
+}
+
+function deleteQueue(cb){
+  sendRequest("/lol-lobby/v1/lobby", "DELETE", {}, (code) => {
+    cb()
+  }, (obj) => {console.log(obj)})
+}
+
+function getQueues(cb){
+  sendRequest("/lol-game-queues/v1/queues", "GET", {}, (code) => {
+    
+  }, (obj) => {cb(obj)})
 }
 
 function connectToAPI() {

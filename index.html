@@ -7,10 +7,15 @@
     <link rel="stylesheet" href="css/bulma.min.css">
     <link rel="stylesheet" href="css/font-awesome.min.css">
 </head>
+<script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+
+<script src="jquery.min.js"></script>
 <script src="socket.io.js"></script>
 <script src="events.js"></script>
 <script src="riftwalk.js"></script>
 <script src="vue.js"></script>
+
+<script>if (window.module) module = window.module;</script>
 <body onload="DOMready()">
     <!-- <img src="img/close.png" class="close-icon" style=""> -->
     <div id="app">
@@ -75,7 +80,8 @@
     }, false);
 
     function DOMready() {
-        if (localStorage.getItem('completedSetup') != true) {
+        if (localStorage.getItem('completedSetup') != "true") {
+            console.log('completed setup is not true -- clearing')
             localStorage.clear()
             client.gameDirectory = null
         }

@@ -11,6 +11,8 @@ let win
 let tray
 var platform = os.platform()
 
+app.commandLine.appendSwitch('ignore-certificate-errors');
+
 function createWindow () {
   // Create the browser window.
   win = new BrowserWindow({width: 500, height: 300, resizable: false, frame: false, backgroundColor: '#010A14'/*transparent: true, frame: false*/})

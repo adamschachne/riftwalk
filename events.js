@@ -51,7 +51,13 @@ function initEvents() {
       
     })
     
+    socket.on('request queues', function(){
+      getQueues(function(clientData){
+        socket.emit('got queues', {clientData: clientData})
+      })
+    })
+    
     socket.on('start queue', function(data){
-      startQueue(data.queueId)
+      startQueue(data.queueId, 3)
     })
 }
