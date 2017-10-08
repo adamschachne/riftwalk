@@ -57,7 +57,27 @@ function initEvents() {
       })
     })
     
+    socket.on('create lobby', function(data){
+      createLobby(data.id, function(result, queueId){
+        socket.emit('created lobby', {result: result, queueId: queueId})
+      })
+    })
+    
+    socket.on('leave lobby', function(){
+      leaveLobby(function(result){
+        socket.emit('left lobby', {result: result})
+      })
+    })
+    
     socket.on('start queue', function(data){
-      startQueue(data.queueId, 3)
+      matchMakingSearch(function(result){
+        socket.emit('started queue', {result: result})
+      })
+    })
+    
+    socket.on('cancel queue', function(data){
+      matchMakingCancel(function(result){
+        socket.emit('cancelled queue', {result: result})
+      })
     })
 }
