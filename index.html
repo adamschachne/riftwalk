@@ -79,10 +79,10 @@
                 <table class="table is-fullwidth" style="background-color: transparent; color: #E3D8B5; ">
                   <tbody>
                     <tr v-for="device in devices" style="padding-bottom: 5px;">
-                      <td style="padding: 2px; border: 0px;"><span class="icon"><i class="fa" :class="[device.type == 'a' ? 'fa-android' : 'fa-apple']"></i></span></td>
-                      <td style="padding: 2px; border: 0px;">{{device.device_name}}</td>
-                      <td style="padding: 2px; border: 0px;">Added {{device.timestamp}}</td>
-                      <td style="padding: 2px; border: 0px;"><a class="button is-danger is-small"><span class="icon is-small"><i class="fa fa-times"></i></span></a></td>
+                      <td class="device-td"><span class="icon"><i class="fa" :class="[device.type == 'a' ? 'fa-android' : 'fa-apple']"></i></span></td>
+                      <td class="device-td"><span style="width: 180px !important;text-overflow: ellipsis;display: inline-block;overflow: hidden;white-space: nowrap;">{{device.device_name}}</span></td>
+                      <td class="device-td">Added {{device.timestamp}}</td>
+                      <td class="device-td"><a class="button is-danger is-small"><span class="icon is-small"><i class="fa fa-times"></i></span></a></td>
                     </tr>
                   </tbody>
                 </table>

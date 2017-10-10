@@ -20,6 +20,11 @@ input {
     background: #1E2327;
 }
 
+.device-td{
+  padding: 2px !important;
+  border: 0px !important;
+}
+
 .no-drag {
     -webkit-app-region: no-drag;
 }
