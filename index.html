@@ -76,16 +76,26 @@
                   Devices
               </h1>
               <section class="section" style="background-color: rgba(1, 10, 20, 0.45); padding: 1em;">
-                <table class="table is-fullwidth" style="background-color: transparent; color: #E3D8B5; ">
-                  <tbody>
-                    <tr v-for="device in devices" style="padding-bottom: 5px;">
-                      <td class="device-td"><span class="icon"><i class="fa" :class="[device.type == 'a' ? 'fa-android' : 'fa-apple']"></i></span></td>
-                      <td class="device-td"><span style="width: 180px !important;text-overflow: ellipsis;display: inline-block;overflow: hidden;white-space: nowrap;">{{device.device_name}}</span></td>
-                      <td class="device-td">Added {{device.timestamp}}</td>
-                      <td class="device-td"><a class="button is-danger is-small"><span class="icon is-small"><i class="fa fa-times"></i></span></a></td>
-                    </tr>
-                  </tbody>
-                </table>
+                <div class="container loader" style="font-size: 42px; text-align: center;" v-if="loading">
+                </div>
+                <div v-if="!loading">
+                  <table class="table is-fullwidth" style="background-color: transparent; color: #E3D8B5;">
+                    <tbody>
+                      <tr v-for="device in devices" style="padding-bottom: 5px;">
+                        <td class="device-td"><span class="icon"><i class="fa" :class="[device.type == 'a' ? 'fa-android' : 'fa-apple']"></i></span></td>
+                        <td class="device-td"><span style="width: 180px !important;text-overflow: ellipsis;display: inline-block;overflow: hidden;white-space: nowrap;">{{device.device_name}}</span></td>
+                        <td class="device-td">Added {{device.timestamp}}</td>
+                        <td class="device-td"><a class="button is-danger is-small"><span class="icon is-small"><i class="fa fa-times"></i></span></a></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <a class="button is-success">
+                    <span class="icon is-small">
+                      <i class="fa fa-plus"></i>
+                    </span>
+                    <span>Add New</span>
+                  </a>
+                </div>
               </section>
 
           </div>
