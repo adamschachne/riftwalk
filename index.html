@@ -30,7 +30,7 @@
                 </p>
                 <div v-bind:style="{opacity: actionOpacity, transition: 'opacity 0.5s'}">
                   <p class="league-text">Select your League of Legends {{platform == "darwin" ? ".app file" : "directory"}}</p>
-                  <section class="section" style="background-color: #1E2327; padding: 1em;">
+                  <section class="section" style="background-color: rgba(1, 10, 20, 0.45); padding: 1em;">
                     <div class="container">
 
                       <nav class="level is-mobile">
@@ -60,7 +60,7 @@
                 <p class="subtitle league-text" :style="{opacity: subtitleOpacity, transition: 'opacity 0.5s'}">
                     Connect your smartphone
                 </p>
-                <section class="section" style="background-color: #1E2327; padding: 1em;">
+                <section class="section" style="background-color: rgba(1, 10, 20, 0.45); padding: 1em;">
                   <div :class="{loader: !code}" class="container" style="font-size: 42px; text-align: center;">
                       {{code}}
                   </div>
@@ -69,6 +69,26 @@
                     Enter this code in your mobile app to continue
                 </p>
             </div>
+        </section>
+        <section class="section" v-if="!firstTime" style="padding-top: 30px;">
+          <div class="container">
+              <h1 class="title league-text" :style="{opacity: 1, transition: 'opacity 0.2s'}">
+                  Devices
+              </h1>
+              <section class="section" style="background-color: rgba(1, 10, 20, 0.45); padding: 1em;">
+                <table class="table is-fullwidth" style="background-color: transparent; color: #E3D8B5; ">
+                  <tbody>
+                    <tr v-for="device in devices" style="padding-bottom: 5px;">
+                      <td style="padding: 2px; border: 0px;"><span class="icon"><i class="fa" :class="[device.type == 'a' ? 'fa-android' : 'fa-apple']"></i></span></td>
+                      <td style="padding: 2px; border: 0px;">{{device.device_name}}</td>
+                      <td style="padding: 2px; border: 0px;">Added {{device.timestamp}}</td>
+                      <td style="padding: 2px; border: 0px;"><a class="button is-danger is-small"><span class="icon is-small"><i class="fa fa-times"></i></span></a></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+
+          </div>
         </section>
     </div>
 </body>
@@ -89,6 +109,7 @@
         validateDirectory((success) => {
           if (success){
             client.lockFileInterval = setInterval(checkLeagueClientOpen, LOCK_FILE_RATE)
+            ui.firstTime = false
             connectToAPI()
           }
           else {

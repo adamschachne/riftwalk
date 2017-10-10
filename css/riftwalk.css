@@ -1,5 +1,5 @@
 body {
-    background-color: #010A14;
+    /*background-color: #010A14;*/
     color: #E3D8B5 !important;
 }
 
@@ -9,7 +9,12 @@ html {
     -webkit-user-select: none;
     cursor: default;
     overflow: hidden !important;
+    background-image: url('../img/background.png');
+    /*background-attachment: scroll;*/
+    background-size: cover;
 }
+
+
 
 input {
     background: #1E2327;
