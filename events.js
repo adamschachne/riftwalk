@@ -33,12 +33,13 @@ function initEvents() {
         if (ui.firstTime) {
             ui.code = null
         }
-        ui.apiConnect = false
+        //ui.apiConnect = false
     });
 
     socket.on('created client', function(data) {
-        localStorage.setItem('token', data.token)
-        socket.emit('request code', {token : data.token})
+      ui.apiConnect = true
+      localStorage.setItem('token', data.token)
+      socket.emit('request code', {token : data.token})
     })
 
     socket.on('code generated', function(data) {
@@ -55,6 +56,10 @@ function initEvents() {
     socket.on('device list', function(data){
         ui.devices = data.devices
         ui.loading = false
+    })
+
+    socket.on('get state', function() {
+      socket.emit('got state', client.state)
     })
 
     socket.on('request queues', function(){

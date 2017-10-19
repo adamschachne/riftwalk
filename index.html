@@ -11,10 +11,10 @@
 
 <script src="jquery.min.js"></script>
 <script src="socket.io.js"></script>
+<script src="watch.js"></script>
 <script src="events.js"></script>
-<script src="riftwalk.js"></script>
 <script src="vue.js"></script>
-
+<script src="riftwalk.js"></script>
 <script>if (window.module) module = window.module;</script>
 <body onload="DOMready()">
     <!-- <img src="img/close.png" class="close-icon" style=""> -->
@@ -102,8 +102,8 @@
                   <div class="box" style="background-color: rgba(1, 10, 20, 0.45); padding: 1em;">
                     <nav class="breadcrumb" aria-label="breadcrumbs" style="width: 155px;margin: auto;">
                       <ul>
-                        <li><a href="#" style="color: #5dbf8f;"><span class="icon is-small"><i class="fa fa-check"></i></span><span>Client</span></a></li>
-                        <li><a href="#" style="color: #5dbf8f;"><span class="icon is-small"><i class="fa fa-check"></i></span><span>API</span></a></li>
+                        <li><a href="#" :style="(clientConnected ? (loggedIn ? 'color: #5dbf8f' : 'color: rgb(255, 241, 58)') : 'color: rgb(255, 52, 52)')"><span class="icon is-small"><i :class="clientConnected ? (loggedIn ? 'fa fa-check' : 'fa fa-question') : 'fa fa-times'"></i></span><span>Client</span></a></li>
+                        <li><a href="#" :style="(apiConnect ? 'color: #5dbf8f' : 'color: rgb(255, 52, 52)')"><span class="icon is-small"><i :class="apiConnect ? 'fa fa-check' : 'fa fa-times'"></i></span><span>API</span></a></li>
                       </ul>
                     </nav>
                 </div>

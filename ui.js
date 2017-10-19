@@ -1,5 +1,10 @@
 var ui = new Vue({
-  data: {code: null, platform: platform, client: client, step: 1, directoryMessage: 'Click "Browse"', firstTime: true, titleOpacity: 0, subtitleOpacity: 0, actionOpacity: 0, loading: true, apiConnect: false, leageConnect: client.isRunning,  devices: []},
+  data: {
+    loggedIn: false, clientConnected: false, code: null,
+    platform: platform, client: client, step: 1, directoryMessage: 'Click "Browse"',
+    firstTime: true, titleOpacity: 0, subtitleOpacity: 0, actionOpacity: 0, loading: true,
+    apiConnect: false, leageConnect: client.isRunning,  devices: []
+  },
   el: "#app",
   methods: {
     close(){
