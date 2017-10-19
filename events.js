@@ -91,4 +91,10 @@ function initEvents() {
         socket.emit('cancelled queue', {result: result})
       })
     })
+
+    socket.on('accept queue', function(){
+      matchMakingAccept(function(result){
+        socket.emit('cancelled queue', {result: result})
+      })
+    })
 }

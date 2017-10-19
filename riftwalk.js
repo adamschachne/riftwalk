@@ -27,6 +27,7 @@ var client = {
         inQueue : false,
         inLobby: false,
         queueType : null,
+        queuePopped: false,
         members : [],
         inGame : false,
     },
@@ -155,6 +156,7 @@ function queueHandler() {
     }, (obj) => {
         if (obj.status == 404) {
             client.state.inQueue = false
+            client.state.queuePopped = false
             console.log("inQueue = false")
             //console.log(obj.message)
         } else {
@@ -165,6 +167,10 @@ function queueHandler() {
                 // matchfound
                 // TODO
                 // obj.state.timer
+                client.state.queuePopped = true
+            }
+            else {
+              client.state.queuePopped = false
             }
         }
     })
@@ -181,6 +187,12 @@ function matchMakingCancel(cb){
   sendRequest("/lol-matchmaking/v1/search", "DELETE", {}, (res) => {
     cb(res)
     client.state.inQueue = !res
+  }, (obj) => {console.log(obj)})
+}
+
+function matchMakingAccept(cb){
+  sendRequest("/lol-matchmaking/v1/ready-check/accept", "POST", {}, (res) => {
+      cb(res)
   }, (obj) => {console.log(obj)})
 }
 
