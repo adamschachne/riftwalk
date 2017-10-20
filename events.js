@@ -69,8 +69,9 @@ function initEvents() {
     })
 
     socket.on('create lobby', function(data){
-      createLobby(data.id, function(result, queueId){
-        socket.emit('created lobby', {result: result, queueId: queueId})
+      createLobby(data.id, function(result){
+        // result == true if successfully joined lobby
+        socket.emit('created lobby', {result: result, queueId: data.id})
       })
     })
 

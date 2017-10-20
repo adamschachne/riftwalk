@@ -16,6 +16,7 @@ var client = {
     matchMakingInterval : null,
     meInterval : null,
     isRunning : false,
+    timeLeft : null,
     state : {
         clientStatus : "offline", // online, login, offline (closed)
         summonerName : null,
@@ -26,6 +27,7 @@ var client = {
         queues : [],
         inQueue : false,
         inLobby: false,
+        mapId : 'background',
         queueType : null,
         queuePopped: false,
         members : [],
@@ -157,6 +159,8 @@ function queueHandler() {
         if (obj.status == 404) {
             client.state.inQueue = false
             client.state.queuePopped = false
+            client.timeLeft = null
+            client.state.declined = false
             console.log("inQueue = false")
             //console.log(obj.message)
         } else {
@@ -166,11 +170,19 @@ function queueHandler() {
             if (obj.state == "InProgress") {
                 // matchfound
                 // TODO
-                // obj.state.timer
-                client.state.queuePopped = true
+                console.log("timer = ", obj.timer)
+                if (obj.timer >= client.timeLeft) {
+                  client.state.queuePopped = true
+                } else {
+                  client.state.queuePopped = false
+                }
+                client.timeLeft = obj.timer
+                client.state.declined = (obj.playerResponse == "Declined")
             }
             else {
+              client.timeLeft = null
               client.state.queuePopped = false
+              client.state.declined = false
             }
         }
     })
@@ -197,10 +209,19 @@ function matchMakingAccept(cb){
 }
 
 function createLobby(queueId, cb){
-  sendRequest("/lol-lobby/v1/lobby", "POST", {"queueId": queueId}, (res) => {
-      cb(res, queueId)
-      client.state.inLobby = res
-  }, (obj) => {console.log(obj)})
+  sendRequest("/lol-lobby/v1/lobby", "POST", {"queueId": queueId}, (success) => {
+      //cb(res, queueId)
+      cb(success)
+      client.state.inLobby = success
+  }, (obj) => {
+    if (obj.responseJSON && obj.responseJSON.httpStatus == 500) {
+      // failed to join lobby for some reason
+      console.log(obj.responseJSON.message)
+    } else {
+      console.log(obj)
+      client.state.mapId = obj.mapId
+    }
+  })
 }
 
 function getLobby(cb){
@@ -214,6 +235,9 @@ function leaveLobby(cb){
   sendRequest("/lol-lobby/v1/lobby", "DELETE", {}, (res) => {
     cb(res)
     client.state.inLobby = !res
+    if (res) {
+      client.state.mapId = 'background'
+    }
   }, (obj) => {console.log(obj)})
 }
 
@@ -228,7 +252,7 @@ function getQueues(cb){
 function getMe(cb) {
     sendRequest("/lol-chat/v1/me", "GET", {}, (res) => {
     }, (obj) => {
-      console.log(obj)
+      //console.log(obj)
       if (obj.status == 0) {
         console.log("connection to client lost")
         return
@@ -247,6 +271,7 @@ function getMe(cb) {
       ui.clientConnected = true
       client.state.clientStatus = "online"
       client.state.summonerName = obj.name
+      client.state.summonerId = obj.id
       client.state.statusMessage = obj.statusMessage
       client.state.icon = obj.icon
       if (client.state.inLobby = (obj.lol.gameQueueType != "")) {
@@ -256,7 +281,8 @@ function getMe(cb) {
       }
 
       if (client.state.inQueue = (obj.lol.gameStatus == "inQueue")) {
-          client.matchMakingInterval = setInterval(queueHandler, MM_RATE)
+        clearInterval(client.matchMakingInterval)
+        client.matchMakingInterval = setInterval(queueHandler, MM_RATE)
       } else {
           clearInterval(client.matchMakingInterval)
       }
