@@ -15,11 +15,11 @@ app.commandLine.appendSwitch('ignore-certificate-errors');
 
 function createWindow () {
   // Create the browser window.
-  win = new BrowserWindow({width: 500, height: 300, resizable: false, frame: false, backgroundColor: '#010A14'/*transparent: true, frame: false*/})
-  // tray = new Tray('img/trayicon.png')
-  var iconPath = path.join(__dirname, '/img/trayicon.png')
-  tray = new Tray(iconPath);
 
+  win = new BrowserWindow({width: 500, height: 300, resizable: false, frame: false,  icon: path.join(__dirname, '/img/desktop-icon.png'), backgroundColor: '#010A14'/*transparent: true, frame: false*/})
+  // tray = new Tray('img/trayicon.png')
+  var iconPath = path.join(__dirname, '/img/trayicon-small.png')
+  tray = new Tray(iconPath);
 
   const contextMenu = Menu.buildFromTemplate([
         {label: 'Show', type: 'normal', click: function(){
