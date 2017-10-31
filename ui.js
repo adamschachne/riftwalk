@@ -50,6 +50,10 @@ var ui = new Vue({
     invalidDirectory(){
       console.log('invalid directory')
       this.directoryMessage = "Couldn't find League of Legends"
+    },
+    removeDevice(d){
+      this.loading = true
+      socket.emit('remove device', {device: d.id})
     }
   }
 })
