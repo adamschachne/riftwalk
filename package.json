@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/adamschachne/riftwalk#readme",
   "dependencies": {
+    "auto-launch": "^5.0.1",
     "node-notifier": "^5.1.2"
   }
 }

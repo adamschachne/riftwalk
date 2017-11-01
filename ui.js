@@ -54,6 +54,13 @@ var ui = new Vue({
     removeDevice(d){
       this.loading = true
       socket.emit('remove device', {device: d.id})
+    },
+    addDevice(){
+      getPairCode()
+    },
+    cancelAddDevice(){
+      clearInterval(client.codeInterval)
+      this.code = null
     }
   }
 })

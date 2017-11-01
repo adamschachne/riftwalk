@@ -73,9 +73,14 @@
         <section class="section" v-if="!firstTime" style="padding-top: 30px;">
           <div class="container">
               <h1 class="title league-text" :style="{opacity: 1, transition: 'opacity 0.2s'}">
-                  Devices
+                  {{code ? 'Add New Device' : client.state.summonerName ? client.state.summonerName : 'Riftwalk'}}
               </h1>
-              <section class="section" style="background-color: rgba(1, 10, 20, 0.45); padding: 1em;">
+              <section class="section" style="background-color: rgba(1, 10, 20, 0.45); padding: 1em; height: 100px;" v-if="code">
+                <div class="container" style="font-size: 42px; text-align: center;">
+                    {{code}}
+                </div>
+              </section>
+              <section class="section" style="background-color: rgba(1, 10, 20, 0.45); padding-top: 0.5em; padding-bottom: 0.2em; padding-left: 1em; padding-right: 1em; height: 100px; overflow: hidden;" v-if="!code">
                 <div class="container loader" style="font-size: 42px; text-align: center;" v-if="loading">
                 </div>
                 <div v-if="!loading">
@@ -89,7 +94,7 @@
                       </tr>
                     </tbody>
                   </table>
-                  <p style="text-align: center; color: #E3D8B5;" v-else>
+                  <p style="text-align: center; color: #E3D8B5; padding-top: 20px;" v-if="devices.length == 0">
                     No devices paired.
                   </p>
                   <!-- <a class="button is-success">
@@ -103,7 +108,7 @@
               <div class="columns is-mobile" style="margin-top: 2px;">
                 <div class="column" style="padding-top: 2px;">
                   <div class="box" style="background-color: rgba(1, 10, 20, 0.45); padding: 1em;">
-                    <nav class="breadcrumb" aria-label="breadcrumbs" style="width: 155px;margin: auto;">
+                    <nav class="breadcrumb" aria-label="breadcrumbs" style="width: 160px;margin: auto;">
                       <ul>
                         <li><a href="#" :style="(clientConnected ? (loggedIn ? 'color: #5dbf8f' : 'color: rgb(255, 241, 58)') : 'color: rgb(255, 52, 52)')"><span class="icon is-small"><i :class="clientConnected ? (loggedIn ? 'fa fa-check' : 'fa fa-question') : 'fa fa-times'"></i></span><span>Client</span></a></li>
                         <li><a href="#" :style="(apiConnect ? 'color: #5dbf8f' : 'color: rgb(255, 52, 52)')"><span class="icon is-small"><i :class="apiConnect ? 'fa fa-check' : 'fa fa-times'"></i></span><span>API</span></a></li>
@@ -113,10 +118,16 @@
                 </div>
                 <div class="column" style="padding-top: 2px;">
                   <div class="box" style="background-color: rgba(1, 10, 20, 0.45); padding: 1em;">
-                    <a class="button is-dark league-text" style="width: 100%">
+                    <a class="button" style="width: 100%; background: transparent; border: 1px solid #5dbf8f; color: #5dbf8f;" @click="addDevice()" v-if="!code">
                       <span class="icon">
-                      <i class="fa fa-cog"></i>
-                    </span><span>Settings</span></a>
+                      <i class="fa fa-plus"></i>
+                      </span><span>Add Device</span>
+                    </a>
+                    <a class="button" style="width: 100%; background: transparent; border: 1px solid rgb(255, 52, 52); color: rgb(255, 52, 52);" @click="cancelAddDevice()" v-if="code">
+                      <span class="icon">
+                      <i class="fa fa-times"></i>
+                    </span><span>Cancel</span>
+                    </a>
                 </div>
                 </div>
 

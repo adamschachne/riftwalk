@@ -8,6 +8,7 @@ const platform = require('electron').remote.require('os').platform()
 const LOCK_FILE_RATE = 2000
 const MM_RATE = 500
 const ME_RATE = 1000
+const CODE_RATE = 30000*60
 const API_URL = 'http://104.236.184.38:3000'
 
 var client = {
@@ -15,6 +16,7 @@ var client = {
     lockFileInterval : null,
     matchMakingInterval : null,
     meInterval : null,
+    codeInterval: null,
     isRunning : false,
     timeLeft : null,
     state : {
@@ -87,6 +89,14 @@ function selectDirectory(cb) {
         }
         return null
     })
+}
+
+function getPairCode(){
+  clearInterval(client.codeInterval)
+  socket.emit('request code', {token : localStorage.getItem('token')})
+  client.codeInterval = setInterval(function(){
+    socket.emit('request code', {token : localStorage.getItem('token')})
+  }, CODE_RATE)
 }
 
 function checkLeagueClientOpen() {

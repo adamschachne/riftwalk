@@ -8,7 +8,7 @@ function initEvents() {
     socket.on('connection success', function(data) {
         ui.apiConnect = true
         if (ui.firstTime) {
-            socket.emit('request code', {token : localStorage.getItem('token')})
+          getPairCode()
         }
         else {
             socket.emit('request device list', {token : localStorage.getItem('token')})
@@ -39,7 +39,7 @@ function initEvents() {
     socket.on('created client', function(data) {
       ui.apiConnect = true
       localStorage.setItem('token', data.token)
-      socket.emit('request code', {token : data.token})
+      getPairCode()
     })
 
     socket.on('code generated', function(data) {
@@ -50,6 +50,8 @@ function initEvents() {
     socket.on('mobile added', function(data){
         localStorage.setItem('completedSetup', true)
         ui.firstTime = false
+        ui.code = null
+        clearInterval(client.codeInterval)
         socket.emit('request device list', {token : localStorage.getItem('token')})
     })
 

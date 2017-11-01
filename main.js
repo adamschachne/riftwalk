@@ -4,7 +4,7 @@ const url = require('url')
 const fs = require('fs')
 const os = require('os')
 const notifier = require('node-notifier')
-
+const AutoLaunch = require('auto-launch');
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win
@@ -28,12 +28,15 @@ function createWindow () {
             app.dock.show()
           }
         }},
+        {label: 'Start at Login', type: 'checkbox', checked: false, click: function(item){
+          console.log(item.checked)
+        }},
         {label: '', type: 'separator'},
         {label: 'Quit', type: 'normal', click: function(){
           app.quit()
         }}
     ])
-    tray.setToolTip('This is my application.')
+    tray.setToolTip('Riftwalk')
     tray.setContextMenu(contextMenu)
   // and load the index.html of the app.
   win.loadURL(url.format({
