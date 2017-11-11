@@ -111,6 +111,7 @@ function checkLeagueClientOpen() {
                         //sendRequest("/lol-matchmaking/v1/search", "POST", {}, function() {})
                         //client.matchMakingInterval = setInterval(queueHandler, MM_RATE)
                         //console.log("setting me interval")
+                        clearInterval(client.meInterval)
                         client.meInterval = setInterval(function() {
                           getMe(() => {})
                         }, ME_RATE);
@@ -265,6 +266,7 @@ function getMe(cb) {
       //console.log(obj)
       if (obj.status == 0) {
         console.log("connection to client lost")
+        checkLeagueClientOpen()
         return
       }
 
@@ -272,6 +274,7 @@ function getMe(cb) {
         console.log("not logged in")
         client.state.clientStatus = "login" // not logged in
         ui.loggedIn = false
+        checkLeagueClientOpen()
         return
       }
       // if (obj.status == 409) {
